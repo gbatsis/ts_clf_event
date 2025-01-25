@@ -10,6 +10,9 @@
 #   universal: false
 
 -e file:.
+attrs==25.1.0
+    # via jsonschema
+    # via referencing
 babel==2.16.0
     # via mkdocs-material
 certifi==2024.12.14
@@ -22,6 +25,8 @@ click==8.1.8
 colorama==0.4.6
     # via griffe
     # via mkdocs-material
+fastjsonschema==2.21.1
+    # via nbformat
 ghp-import==2.1.0
     # via mkdocs
 griffe==1.5.5
@@ -32,6 +37,14 @@ jinja2==3.1.5
     # via mkdocs
     # via mkdocs-material
     # via mkdocstrings
+jsonschema==4.23.0
+    # via nbformat
+jsonschema-specifications==2024.10.1
+    # via jsonschema
+jupyter-core==5.7.2
+    # via nbformat
+kaleido==0.2.1
+    # via ts-clf-event
 markdown==3.7
     # via mkdocs
     # via mkdocs-autorefs
@@ -63,15 +76,27 @@ mkdocstrings==0.27.0
     # via mkdocstrings-python
 mkdocstrings-python==1.13.0
     # via ts-clf-event
+nbformat==5.10.4
+    # via ts-clf-event
+numpy==2.2.2
+    # via pandas
 packaging==24.2
     # via mkdocs
+    # via plotly
 paginate==0.5.7
     # via mkdocs-material
+pandas==2.2.3
+    # via ts-clf-event
 pathspec==0.12.1
     # via mkdocs
+pip==24.3.1
+    # via ts-clf-event
 platformdirs==4.3.6
+    # via jupyter-core
     # via mkdocs-get-deps
     # via mkdocstrings
+plotly==5.24.1
+    # via ts-clf-event
 pygments==2.19.1
     # via mkdocs-material
 pymdown-extensions==10.14.1
@@ -79,6 +104,9 @@ pymdown-extensions==10.14.1
     # via mkdocstrings
 python-dateutil==2.9.0.post0
     # via ghp-import
+    # via pandas
+pytz==2024.2
+    # via pandas
 pyyaml==6.0.2
     # via mkdocs
     # via mkdocs-get-deps
@@ -86,12 +114,27 @@ pyyaml==6.0.2
     # via pyyaml-env-tag
 pyyaml-env-tag==0.1
     # via mkdocs
+referencing==0.36.2
+    # via jsonschema
+    # via jsonschema-specifications
 regex==2024.11.6
     # via mkdocs-material
 requests==2.32.3
     # via mkdocs-material
+rpds-py==0.22.3
+    # via jsonschema
+    # via referencing
 six==1.17.0
     # via python-dateutil
+tenacity==9.0.0
+    # via plotly
+traitlets==5.14.3
+    # via jupyter-core
+    # via nbformat
+typing-extensions==4.12.2
+    # via referencing
+tzdata==2025.1
+    # via pandas
 urllib3==2.3.0
     # via requests
 watchdog==6.0.0
