@@ -37,6 +37,8 @@ jinja2==3.1.5
     # via mkdocs
     # via mkdocs-material
     # via mkdocstrings
+joblib==1.4.2
+    # via scikit-learn
 jsonschema==4.23.0
     # via nbformat
 jsonschema-specifications==2024.10.1
@@ -80,6 +82,8 @@ nbformat==5.10.4
     # via ts-clf-event
 numpy==2.2.2
     # via pandas
+    # via scikit-learn
+    # via scipy
 packaging==24.2
     # via mkdocs
     # via plotly
@@ -124,10 +128,16 @@ requests==2.32.3
 rpds-py==0.22.3
     # via jsonschema
     # via referencing
+scikit-learn==1.6.1
+    # via ts-clf-event
+scipy==1.15.1
+    # via scikit-learn
 six==1.17.0
     # via python-dateutil
 tenacity==9.0.0
     # via plotly
+threadpoolctl==3.5.0
+    # via scikit-learn
 traitlets==5.14.3
     # via jupyter-core
     # via nbformat

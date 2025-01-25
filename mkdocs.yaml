@@ -7,6 +7,9 @@ copyright: |
   Copyright &copy; 2025-2025 Georgios C. Batsis </a>
 nav:
   - Overview: index.md
+  - Code Reference: 
+    - Data Handler:
+      - Feature Engineer: src/code_reference/data/feat_eng.md
 theme:
   name: material
   features:
