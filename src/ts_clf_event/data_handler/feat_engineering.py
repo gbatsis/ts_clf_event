@@ -108,7 +108,10 @@ class FeatureEngineer:
         """
         if not isinstance(df.index, pd.DatetimeIndex):
             try:
-                df = df.set_index('datetime')
+                # Set index and drop the existed Unnamed: 0 column
+                df = df.set_index("datetime")
+                if "Unnamed: 0" in df.columns:
+                    df = df.drop("Unnamed: 0", axis=1)
             except KeyError:
                 raise ValueError("DataFrame must have a DatetimeIndex or a 'datetime' column.")
 

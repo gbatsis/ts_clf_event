@@ -1,6 +1,6 @@
 import pandas as pd
 import pytest
-from ts_clf_event.data_handler.feat_eng import FeatureEngineer  
+from ts_clf_event.data_handler.feat_engineering import FeatureEngineer  
 
 # Sample DataFrame fixture
 @pytest.fixture
