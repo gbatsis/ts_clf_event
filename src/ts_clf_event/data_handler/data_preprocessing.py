@@ -83,6 +83,12 @@ class FeatureEngineeringTransformer(BaseEstimator, TransformerMixin):
         features_to_diff: List[str], 
         groupby_col: str = "provider"
     ):
+        self.windows = windows
+        self.features_to_roll = features_to_roll
+        self.diff_lags = diff_lags
+        self.features_to_diff = features_to_diff
+        self.groupby_col = groupby_col
+        
         self.feature_engineer = FeatureEngineer(
             windows, features_to_roll, diff_lags, features_to_diff, groupby_col
         )
