@@ -84,6 +84,7 @@ numpy==2.2.2
     # via pandas
     # via scikit-learn
     # via scipy
+    # via xgboost
 packaging==24.2
     # via mkdocs
     # via plotly
@@ -93,7 +94,7 @@ pandas==2.2.3
     # via ts-clf-event
 pathspec==0.12.1
     # via mkdocs
-pip==24.3.1
+pip==25.0
     # via ts-clf-event
 platformdirs==4.3.6
     # via jupyter-core
@@ -128,10 +129,11 @@ requests==2.32.3
 rpds-py==0.22.3
     # via jsonschema
     # via referencing
-scikit-learn==1.6.1
+scikit-learn==1.6.0
     # via ts-clf-event
 scipy==1.15.1
     # via scikit-learn
+    # via xgboost
 six==1.17.0
     # via python-dateutil
 tenacity==9.0.0
@@ -149,3 +151,5 @@ urllib3==2.3.0
     # via requests
 watchdog==6.0.0
     # via mkdocs
+xgboost==2.1.3
+    # via ts-clf-event
