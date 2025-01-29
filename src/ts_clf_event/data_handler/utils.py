@@ -13,7 +13,7 @@ def split_data_time_based(data_path: str, test_size_percent: int, label_col: str
         train_df, test_df
     """
 
-    df = pd.read_csv(data_path)
+    df = pd.read_csv(data_path, index_col=0)
 
     test_size_rows = int(test_size_percent * len(df))
 

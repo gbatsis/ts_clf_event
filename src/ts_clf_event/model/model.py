@@ -7,8 +7,7 @@ from typing import List, Dict, Any
 from pathlib import Path
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import TimeSeriesSplit, cross_validate
-from sklearn.pipeline import Pipeline
-from sklearn.metrics import classification_report, roc_auc_score, make_scorer, precision_score, recall_score, f1_score
+from sklearn.metrics import make_scorer, precision_score, recall_score, f1_score
 
 from ts_clf_event.data_handler.data_preprocessing import DataPreprocessor
 
