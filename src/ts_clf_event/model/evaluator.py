@@ -18,14 +18,13 @@ from sklearn.metrics import (
 )
 
 class Evaluator:
-    def __init__(self):
-        self.output_dir = os.path.join(Path(__file__).parent.parent.parent.parent, "output", "test_results")
+    def __init__(self, output_dir=os.path.join(Path(__file__).parent.parent.parent.parent, "output", "test_results")):
+        self.output_dir = output_dir
         if not os.path.isdir(self.output_dir):
             os.makedirs(self.output_dir)
         
     def report_metrics(
-        self, true_labels: list, predicted_probs: list, threshold: float = None, only_display = True
-    ) -> dict:
+        self, true_labels: list, predicted_probs: list, threshold: float = 0.5) -> dict:
         """
         Generate and log a detailed metrics report, save results to files, and return metrics in a dictionary.
 
@@ -38,9 +37,6 @@ class Evaluator:
         Returns:
             dict: A dictionary containing all calculated metrics.
         """
-
-        if threshold is None:
-            threshold = self.threshold
 
         # Convert probabilities to binary predictions
         predicted_labels = (np.array(predicted_probs) >= threshold).astype(int)
