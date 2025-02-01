@@ -1,5 +1,5 @@
 import pandas as pd
-from typing import Tuple
+from typing import Tuple, Dict
 
 def split_data_time_based(data_path: str, test_size_percent: int, label_col: str) -> Tuple[pd.DataFrame, pd.DataFrame]:
     """Splits time-series data chronologically based on a specified percentage of rows for the test set.
@@ -35,3 +35,35 @@ def split_data_time_based(data_path: str, test_size_percent: int, label_col: str
     print("Time in test set:", test_df['datetime'].min(), "to", test_df['datetime'].max())
 
     return train_df, test_df
+
+def analyze_sampling_rate(df: pd.DataFrame, group_column: str) -> Dict:
+    """
+    Calculates descriptive statistics of the sampling rate per a group column.
+
+    Args:
+        df: The input DataFrame.
+
+    Returns:
+        DataFrame: Descriptive statistics of the sampling rate per a group column.
+    """
+
+    # Ensure the datetime column is of datetime type
+    df['datetime'] = pd.to_datetime(df['datetime'])
+
+    # Sort by group_column and datetime for accurate time difference calculation
+    df.sort_values(by=[group_column, 'datetime'], inplace=True)
+
+    # Calculate time differences within each group_column group
+    df['time_diff'] = df.groupby(group_column)['datetime'].diff()
+
+    # Convert time difference to seconds for easier interpretation
+    df['time_diff_seconds'] = df['time_diff'].dt.total_seconds()
+
+    # Analyze sampling rate per group_column
+    sampling_rate_stats = df.groupby(group_column)['time_diff_seconds'].describe()
+
+    # Calculate the most frequent sampling rate (mode)
+    sampling_rate_mode = df.groupby(group_column)['time_diff_seconds'].apply(lambda x: x.mode().iloc[0] if not x.mode().empty else None)
+    sampling_rate_stats = sampling_rate_stats.merge(sampling_rate_mode.rename('mode'), left_index=True, right_index=True)
+
+    return sampling_rate_stats.T.to_dict()
