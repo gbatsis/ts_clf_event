@@ -140,7 +140,7 @@ class FeatureEngineer:
                 )
 
         return df_engineered
-
+    
     def engineer_all_features(self, df: pd.DataFrame) -> pd.DataFrame:
         """
         Calculates all features (window-based and difference-based) for the input DataFrame.
@@ -162,4 +162,8 @@ class FeatureEngineer:
 
         df_engineered = self.engineer_window_features(df)
         df_engineered = self.engineer_difference_features(df_engineered)
+        
+        # Feature list
+        self.feature_list = df_engineered.columns.tolist()
+        
         return df_engineered
