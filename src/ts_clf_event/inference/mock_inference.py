@@ -2,14 +2,17 @@
 
 import os
 import time
+import requests
+
 from pathlib import Path
+
 from ts_clf_event.data_handler.utils import split_data_time_based
 from ts_clf_event.inference.inference import Inference
 from ts_clf_event.model.evaluator import Evaluator
 
 def mock_inference(
         data_path: str =os.path.join(Path(__file__).parent.parent.parent.parent, "data", "test_dataframe.csv"),
-        history_window: int = 80
+        history_points: int = 80
         ) -> None:
     
     """
@@ -27,20 +30,8 @@ def mock_inference(
     label_col = "process"
 
     # Split the data and keep the training as history and the test as inference
-    history_df, inference_df = split_data_time_based(data_path, test_size_percent, label_col)
+    _, inference_df = split_data_time_based(data_path, test_size_percent, label_col)
 
-    windows = [30, 40, 60]
-    features_to_roll = ["value", "level", "frequency", "speed"]
-    diff_lags = [1, 2]
-    group_by_col = "provider"
-
-    history_df = history_df.groupby(group_by_col).tail(history_window)
-    history_df = history_df.reset_index(drop=True).sort_values("datetime")
-    
-    # Drop the process column
-    history_df = history_df.drop("process", axis=1)
-
-    inference = Inference(history_df, windows, features_to_roll, diff_lags, features_to_roll, group_by_col, history_window)
     
     y_true_list = []
     y_pred_list = []
@@ -52,7 +43,8 @@ def mock_inference(
 
         # Drop the process column
         data = row.drop("process").to_dict()
-        y_pred_prob = inference.predict(data)
+        response = requests.post("http://localhost:8000/predict/", json=data)
+        y_pred_prob = response.json()["probability"]
 
         y_true_list.append(row["process"])
         y_pred_list.append(y_pred_prob)
@@ -67,8 +59,6 @@ def mock_inference(
 
     evaluator = Evaluator("./output/test_results")
     evaluator.report_metrics(y_true_list, y_pred_list)
-
-
 
 if __name__ == "__main__":
     mock_inference()

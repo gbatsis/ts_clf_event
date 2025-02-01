@@ -1,6 +1,6 @@
 import warnings
 import pandas as pd
-from typing import List, Dict
+from typing import Union, List, Dict
 
 from ts_clf_event.data_handler.utils import analyze_sampling_rate
 
@@ -12,7 +12,7 @@ class FeatureEngineer:
     A class for extracting features from time series data, including window-based features and difference features.
 
     Args:
-        windows (List[int]): A list of window sizes (in terms of number of rows) to use for
+        windows (Union[str, List[int]]): A list of window sizes (in terms of number of rows) to use for
             calculating rolling window statistics.
         features_to_roll (List[str]): A list of feature names (column names in the
             DataFrame) for which to calculate rolling window statistics.
@@ -26,7 +26,7 @@ class FeatureEngineer:
     """
     def __init__(
         self,
-        windows: List[int],
+        windows: Union[str, List[int]],
         features_to_roll: List[str],
         diff_lags: List[int],
         features_to_diff: List[str],
@@ -140,7 +140,7 @@ class FeatureEngineer:
                 )
 
         return df_engineered
-
+    
     def engineer_all_features(self, df: pd.DataFrame) -> pd.DataFrame:
         """
         Calculates all features (window-based and difference-based) for the input DataFrame.
@@ -162,4 +162,8 @@ class FeatureEngineer:
 
         df_engineered = self.engineer_window_features(df)
         df_engineered = self.engineer_difference_features(df_engineered)
+        
+        # Feature list
+        self.feature_list = df_engineered.columns.tolist()
+        
         return df_engineered

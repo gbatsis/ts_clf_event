@@ -1,6 +1,6 @@
 import pandas as pd
 
-from typing import Dict, List
+from typing import Union, Dict, List
 
 from ts_clf_event.model.model import ModelPipeline
 
@@ -21,7 +21,7 @@ class Inference:
     def __init__(
         self, 
         history_df: pd.DataFrame,
-        windows: List[int], 
+        windows: Union[str, List[int]],
         features_to_roll: List[str], 
         diff_lags: List[int], 
         features_to_diff: List[str], 
@@ -108,7 +108,6 @@ class Inference:
             level:,
             frequency:,
             status:,
-            datetime:,
             provider:
         }
 
@@ -119,7 +118,7 @@ class Inference:
             ValueError: If the required columns are missing.
         """
 
-        required_columns = ["start_value", "value", "speed", "level", "frequency", "status", "datetime", "provider"]
+        required_columns = ["start_value", "value", "speed", "level", "frequency", "status", "provider"]
         for col in required_columns:
             if col not in data:
                 raise ValueError(f"Missing required column: {col}")

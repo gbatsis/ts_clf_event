@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from typing import Union, Tuple, List
+from typing import Union, Tuple, List, Dict
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
@@ -50,7 +50,7 @@ class DataFrameTransformer(BaseEstimator, TransformerMixin):
             index=X.index, 
             columns=self.get_feature_names_out(X)
         )
-
+    
     def get_feature_names_out(self, X: pd.DataFrame) -> List[str]:
         """Get feature names for the DataFrame, falling back to original names if not available.
 
@@ -70,7 +70,7 @@ class FeatureEngineeringTransformer(BaseEstimator, TransformerMixin):
     A scikit-learn compatible transformer for applying the FeatureEngineer.
 
     Args:
-        windows (List[int]): List of window sizes for rolling window features.
+        windows (Union[str, List[int]]): List of window sizes for rolling window features.
         features_to_roll (List[str]): List of features to roll.
         diff_lags (List[int]): List of lags for difference features.
         features_to_diff (List[str]): List of features to diff.
@@ -78,7 +78,7 @@ class FeatureEngineeringTransformer(BaseEstimator, TransformerMixin):
     """
     def __init__(
         self, 
-        windows: List[int], 
+        windows: Union[str, List[int]], 
         features_to_roll: List[str], 
         diff_lags: List[int], 
         features_to_diff: List[str], 
@@ -93,7 +93,7 @@ class FeatureEngineeringTransformer(BaseEstimator, TransformerMixin):
         self.feature_engineer = FeatureEngineer(
             windows, features_to_roll, diff_lags, features_to_diff, groupby_col
         )
-
+    
     def fit(self, X: pd.DataFrame, y: pd.Series = None) -> "FeatureEngineeringTransformer":
         """Fits the transformer to the input data (no-op in this case).
 
@@ -118,7 +118,10 @@ class FeatureEngineeringTransformer(BaseEstimator, TransformerMixin):
         """
         if not isinstance(X, pd.DataFrame):
             raise ValueError("Input data must be a pandas DataFrame.")
-        return self.feature_engineer.engineer_all_features(X)
+        
+        x_proccessed = self.feature_engineer.engineer_all_features(X)
+        self.feature_list = x_proccessed.columns.tolist()
+        return x_proccessed
 
 class DataPreprocessor:
     """
@@ -126,7 +129,7 @@ class DataPreprocessor:
     starting with feature engineering and handling missing values.
 
     Args:
-        windows (List[int]): List of window sizes for rolling window features.
+        windows (Union[str, List[int]]): List of window sizes for rolling window features.
         features_to_roll (List[str]): List of features to roll.
         diff_lags (List[int]): List of lags for difference features.
         features_to_diff (List[str]): List of features to diff.
