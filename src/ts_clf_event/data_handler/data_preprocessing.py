@@ -1,14 +1,15 @@
 import numpy as np
 import pandas as pd
 
-from typing import Tuple, List
+from typing import Union, Tuple, List
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
 from sklearn.impute import SimpleImputer
 
-from ts_clf_event.data_handler.utils import split_data_time_based
+from ts_clf_event.data_handler.utils import split_data_time_based, analyze_sampling_rate
 from ts_clf_event.data_handler.feat_engineering import FeatureEngineer
+
 
 class DataFrameTransformer(BaseEstimator, TransformerMixin):
     """
@@ -130,27 +131,38 @@ class DataPreprocessor:
         diff_lags (List[int]): List of lags for difference features.
         features_to_diff (List[str]): List of features to diff.
         groupby_col (str, optional): Column to group by. Defaults to "provider".
+        scaler (str, optional): Scaler to use. Defaults to "minmax".
     """
     def __init__(
         self, 
-        windows: List[int], 
+        windows: Union[str, List[int]], 
         features_to_roll: List[str], 
         diff_lags: List[int], 
         features_to_diff: List[str], 
-        groupby_col: str = "provider"
+        groupby_col: str = "provider",
+        scaler: str = "minmax"
     ):
         self.windows = windows
         self.features_to_roll = features_to_roll
         self.diff_lags = diff_lags
         self.features_to_diff = features_to_diff
         self.groupby_col = groupby_col
+        self.scaler = scaler
 
     def get_pipeline(self) -> Pipeline:
         """Creates a scikit-learn pipeline with feature engineering and missing value handling.
-
+ 
         Returns:
             Pipeline: An sklearn Pipeline object.
         """
+        
+        if self.scaler == "minmax":
+            scaler = MinMaxScaler()
+        elif self.scaler == "standard":
+            scaler = StandardScaler()
+        else:
+            raise ValueError("Invalid scaler specified. Choose 'minmax' or 'standard'.")
+
         pipeline = Pipeline([
             ("feature_engineering", FeatureEngineeringTransformer(
                 self.windows, 
@@ -160,21 +172,20 @@ class DataPreprocessor:
                 self.groupby_col
             )),
             ("imputer", DataFrameTransformer(SimpleImputer(strategy="mean"))),
-            ("scaler", DataFrameTransformer(MinMaxScaler()))
+            ("scaler", DataFrameTransformer(scaler))
         ])
         return pipeline
 
 
 if __name__ == "__main__":
     # Example workflow
-    
     data_path = "/Users/georgebatsis/Documents/Projects/ts_clf_event/data/test_dataframe.csv"
     test_size_percent = 0.4
     label_col = "process"
 
     train_df, test_df = split_data_time_based(data_path, test_size_percent, label_col)
 
-    windows = [30, 40, 60]
+    windows = "auto"
     features_to_roll = ["value", "level", "frequency", "speed"]
     diff_lags = [1, 2]
     
@@ -186,21 +197,21 @@ if __name__ == "__main__":
         groupby_col="provider",
     )
 
-    pipeline = preprocessor.get_pipeline()
-
     x_train = train_df.drop("process", axis=1)
     y_train = train_df["process"]
 
     x_test = test_df.drop("process", axis=1)
     y_test = test_df["process"]
 
+    pipeline = preprocessor.get_pipeline()
     pipeline.fit(x_train, y_train)
 
     x_train_transformed = pipeline.transform(x_train)
     x_test_transformed = pipeline.transform(x_test)
 
-    print(x_train_transformed)
-    print(x_test_transformed)
+    # Print all columns of the transformed DataFrame
+    for col in x_train_transformed.columns:
+        print(col, x_train_transformed[col])
 
 
     

@@ -213,7 +213,7 @@ if __name__ == "__main__":
 
     train_df, test_df = split_data_time_based(data_path, test_size_percent, label_col)
 
-    windows = [30, 40, 60]
+    windows = "auto" #[60, 90, 120]
     features_to_roll = ["value", "level", "frequency", "speed"]
     diff_lags = [1, 2]
     
@@ -230,3 +230,5 @@ if __name__ == "__main__":
         features_to_diff=features_to_roll,
         groupby_col="provider",
     )
+
+    model.cross_validate(x_train, y_train)
