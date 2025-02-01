@@ -47,7 +47,10 @@ def analyze_sampling_rate(df: pd.DataFrame, group_column: str) -> Dict:
         DataFrame: Descriptive statistics of the sampling rate per a group column.
     """
 
-    # Ensure the datetime column is of datetime type
+    # Check if index is datetime - Fix for EDA and pipeline reusability.
+    if not isinstance(df.index, pd.DatetimeIndex):
+        df = df.reset_index(drop=False)
+
     df['datetime'] = pd.to_datetime(df['datetime'])
 
     # Sort by group_column and datetime for accurate time difference calculation
