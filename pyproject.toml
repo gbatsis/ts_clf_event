@@ -17,7 +17,10 @@ dependencies = [
     "xgboost>=2.1.3",
     "fastapi>=0.115.8",
     "uvicorn>=0.34.0",
+    "typer>=0.15.1",
 ]
+
+scripts.manager = "ts_clf_event.cli.manager:app"
 
 readme = "README.md"
 requires-python = ">= 3.8"
