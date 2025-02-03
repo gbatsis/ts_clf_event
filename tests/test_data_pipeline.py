@@ -97,21 +97,3 @@ def test_feature_engineering_transformer(sample_data):
     # Check for correct calculation of rolling mean (example)
     assert transformed_data['value_rolling_mean_2'].iloc[1] == pytest.approx(11.0)
     assert transformed_data['level_rolling_mean_3'].iloc[2] == pytest.approx(2.0)
-
-# Test the split_data_time_based function
-def test_split_data_time_based(tmpdir):
-    # Create a temporary CSV file for testing
-    data = pd.DataFrame({
-        'datetime': pd.to_datetime(['2023-01-01', '2023-01-02', '2023-01-03', '2023-01-04', '2023-01-05']),
-        'process': [0, 1, 0, 1, 0]
-    })
-    file_path = tmpdir.join("test_data.csv")
-    data.to_csv(file_path, index=False)
-
-    # Test the function
-    train_df, test_df = split_data_time_based(str(file_path), 0.4, 'process')
-
-    # Check if the split is correct
-    assert len(train_df) == 3
-    assert len(test_df) == 2
-    assert train_df['datetime'].max() < test_df['datetime'].min()

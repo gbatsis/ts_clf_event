@@ -1,9 +1,9 @@
 [project]
 name = "ts-clf-event"
 version = "0.1.0"
-description = "Add your description here"
+description = "This project implements a machine learning pipeline for classifying events in time series data. It includes data preprocessing, feature engineering, model training with hyperparameter tuning, model evaluation, inference, and a RESTful API for serving predictions."
 authors = [
-    { name = "gbatsis", email = "gbatsis@ahedd.demokritos.gr" }
+    { name = "gbatsis", email = "gcbatsis@gmail.com" }
 ]
 dependencies = [
     "mkdocs-material>=9.5.50",
