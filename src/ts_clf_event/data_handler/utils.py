@@ -1,6 +1,10 @@
 import pandas as pd
 from typing import Tuple, Dict
 
+from ts_clf_event.utils.logging import setup_logger
+
+logger = setup_logger()
+
 def split_data_time_based(data_path: str, test_size_percent: int, label_col: str) -> Tuple[pd.DataFrame, pd.DataFrame]:
     """Splits time-series data chronologically based on a specified percentage of rows for the test set.
 
@@ -24,15 +28,13 @@ def split_data_time_based(data_path: str, test_size_percent: int, label_col: str
     train_df = df_sorted.iloc[:-test_size_rows]
     test_df = df_sorted.iloc[-test_size_rows:]
 
-    # Print the number of data points and class distribution in each set
-    print("Number of data points in train set:", len(train_df))
-    print("Number of data points in test set:", len(test_df))
-    print("Class distribution in train set:", train_df[label_col].value_counts())
-    print("Class distribution in test set:", test_df[label_col].value_counts())
+    logger.info(f"Number of data points in train set: {len(train_df)}")
+    logger.info(f"Number of data points in test set: {len(test_df)}")
+    logger.info(f"Class distribution in train set: {train_df[label_col].value_counts()}")
+    logger.info(f"Class distribution in test set: {test_df[label_col].value_counts()}")
 
-    # Time in train and test set
-    print("Time in train set:", train_df['datetime'].min(), "to", train_df['datetime'].max())
-    print("Time in test set:", test_df['datetime'].min(), "to", test_df['datetime'].max())
+    logger.info(f"Time in train set: {train_df['datetime'].min()} to {train_df['datetime'].max()}")
+    logger.info(f"Time in test set: {test_df['datetime'].min()} to {test_df['datetime'].max()}")
 
     return train_df, test_df
 

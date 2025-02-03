@@ -3,6 +3,9 @@ import pandas as pd
 from typing import Dict, List
 
 from ts_clf_event.model.model import ModelPipeline
+from ts_clf_event.utils.logging import setup_logger
+
+logger = setup_logger()
 
 class Inference:
     """
@@ -59,8 +62,9 @@ class Inference:
         # Load the model
         model.load_model(self.model_name)
 
-        print("Model pipeline:")
-        print(model.pipeline)
+        # Log the model pipeline
+        logger.info("Model pipeline:")
+        logger.info(model.pipeline)
 
         return model
 

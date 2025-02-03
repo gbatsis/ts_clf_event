@@ -4,6 +4,9 @@ from pathlib import Path
 
 from ts_clf_event.data_handler.utils import split_data_time_based
 from ts_clf_event.model.model import ModelPipeline
+from ts_clf_event.utils.logging import setup_logger
+
+logger = setup_logger()
 
 DATA_PATH = os.path.join(Path(__file__).parent.parent.parent.parent.parent, "data", "test_dataframe.csv")
 
@@ -41,7 +44,8 @@ def train_hyper():
         n_splits=5,
     )
 
-    print(model_pipeline.process_cv_results(model_pipeline.cv_results))
+    # Log CV results
+    logger.info(model_pipeline.process_cv_results(model_pipeline.cv_results))
 
     # Re-train the model with the best hyperparameters
     model_pipeline.train(

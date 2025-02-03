@@ -6,6 +6,9 @@ from pathlib import Path
 from ts_clf_event.data_handler.utils import split_data_time_based
 from ts_clf_event.inference.inference import Inference
 from ts_clf_event.model.evaluator import Evaluator
+from ts_clf_event.utils.logging import setup_logger
+
+logger = setup_logger()
 
 DATA_PATH = os.path.join(Path(__file__).parent.parent.parent.parent.parent, "data", "test_dataframe.csv")
 HISTORY_WINDOW = 1000
@@ -64,12 +67,10 @@ def mock():
         # Calculate the elapsed time
         elapsed_time = end_time - start_time
 
-        print("Predicted probability:", y_pred_prob, "in", elapsed_time, "seconds")
+        logger.info(f"Predicted probability: {y_pred_prob} in {elapsed_time} seconds")
 
     evaluator = Evaluator("./output/mock_inf_results")
     evaluator.report_metrics(y_true_list, y_pred_list)
-
-
 
 @inference_cli.command()
 def mock_api():
@@ -110,7 +111,7 @@ def mock_api():
         # Calculate the elapsed time
         elapsed_time = end_time - start_time
 
-        print("Predicted probability:", y_pred_prob, "in", elapsed_time, "seconds")
-
+        logger.info(f"Predicted probability: {y_pred_prob} in {elapsed_time} seconds")
+        
     evaluator = Evaluator("./output/mock_inf_results")
     evaluator.report_metrics(y_true_list, y_pred_list)

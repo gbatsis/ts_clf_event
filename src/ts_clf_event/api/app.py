@@ -4,6 +4,9 @@ from fastapi import FastAPI, HTTPException, Request
 from ts_clf_event.api.utils import extract_history
 from ts_clf_event.inference.inference import Inference
 from ts_clf_event.api.models import InferenceInput, InferenceOutput
+from ts_clf_event.utils.logging import setup_logger
+
+logger = setup_logger()
 
 DATA_PATH = Path(__file__).parent.parent.parent.parent / "data" / "test_dataframe.csv"
 HISTORY_POINTS = 5000
@@ -45,7 +48,7 @@ async def predict(data: InferenceInput, request: Request):
         client_host = request.client.host
 
         # Log the prediction.
-        print(f"Prediction for client {client_host}: {y_pred_prob:.4f}")
+        logger.info(f"Predicted probability for {client_host}: {y_pred_prob}")
 
         return {"probability": y_pred_prob}
 
