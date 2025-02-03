@@ -203,6 +203,8 @@ class ModelPipeline:
 
         model_path = os.path.join(project_root, "output", "models", f"{save_name}.pkl")
 
+        logger.info(f'Saving model to: {model_path}')
+
         with open(model_path, "wb") as f:
             pickle.dump(self.pipeline, f)
 
@@ -215,11 +217,13 @@ class ModelPipeline:
         """
         # Model path project_root/output/models/{model_name}.pkl
         project_root = Path(__file__).parent.parent.parent.parent
-
+        logger.info(os.path.join(project_root, "output", "models"))
         if not os.path.isdir(os.path.join(project_root, "output", "models")):
             raise ValueError("Model directory does not exist.")
         
         model_path = os.path.join(project_root, "output", "models", f"{model_name}.pkl")
+
+        logger.info(f'Loading model from: {model_path}')
 
         if not os.path.isfile(model_path):
             raise ValueError("Model file does not exist.")
