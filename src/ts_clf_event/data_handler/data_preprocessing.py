@@ -180,41 +180,4 @@ class DataPreprocessor:
         return pipeline
 
 
-if __name__ == "__main__":
-    # Example workflow
-    data_path = "/Users/georgebatsis/Documents/Projects/ts_clf_event/data/test_dataframe.csv"
-    test_size_percent = 0.4
-    label_col = "process"
-
-    train_df, test_df = split_data_time_based(data_path, test_size_percent, label_col)
-
-    windows = "auto"
-    features_to_roll = ["value", "level", "frequency", "speed"]
-    diff_lags = [1, 2]
-    
-    preprocessor = DataPreprocessor(
-        features_to_roll=features_to_roll,
-        features_to_diff=features_to_roll,
-        windows=windows,
-        diff_lags=diff_lags,
-        groupby_col="provider",
-    )
-
-    x_train = train_df.drop("process", axis=1)
-    y_train = train_df["process"]
-
-    x_test = test_df.drop("process", axis=1)
-    y_test = test_df["process"]
-
-    pipeline = preprocessor.get_pipeline()
-    pipeline.fit(x_train, y_train)
-
-    x_train_transformed = pipeline.transform(x_train)
-    x_test_transformed = pipeline.transform(x_test)
-
-    # Print all columns of the transformed DataFrame
-    for col in x_train_transformed.columns:
-        print(col, x_train_transformed[col])
-
-
     

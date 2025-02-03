@@ -3,6 +3,9 @@ import pandas as pd
 from typing import List, Dict
 
 from ts_clf_event.data_handler.utils import analyze_sampling_rate
+from ts_clf_event.utils.logging import setup_logger
+
+logger = setup_logger()
 
 # Ignore warnings
 warnings.filterwarnings("ignore")
@@ -75,7 +78,7 @@ class FeatureEngineer:
 
         # Logging the windows for each provider
         for provider in windows:
-            print(f"Windows for {provider}: {windows[provider]}")
+            logger.info(f"Windows for {provider}: {windows[provider]}")
         
         return windows
 

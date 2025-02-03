@@ -17,6 +17,10 @@ from sklearn.metrics import (
     confusion_matrix,
 )
 
+from ts_clf_event.utils.logging import setup_logger
+
+logger = setup_logger()
+
 class Evaluator:
     def __init__(self, output_dir=os.path.join(Path(__file__).parent.parent.parent.parent, "output", "test_results")):
         self.output_dir = output_dir
@@ -68,7 +72,7 @@ class Evaluator:
         try:
             metrics["auroc"] = roc_auc_score(true_labels, predicted_probs)
         except ValueError:
-            print("Only one class present in y_true. ROC AUC score is not defined in that case.")
+            logger.error("Only one class present in y_true. ROC AUC score is not defined in that case.")
             
             metrics["auroc"] = np.nan
 
@@ -94,24 +98,22 @@ class Evaluator:
         self.plot_pr_curve(precision, recall, metrics["ap"])
         self.plot_roc_curve(fpr, tpr, metrics["auroc"])
 
-        # Print the confusion matrix
-        print("Confusion Matrix:\n", cm_df)
-
         # Pretty - Print metrics with the logger
-        print("Macro-averaged Metrics:")
-        print("  Precision (Macro):  ", metrics["precision_macro"])
-        print("  Recall (Macro):  ", metrics["recall_macro"])
-        print("  F1-Score (Macro):  ", metrics["f1_macro"])
-        print(" Positive Class Metrics:")
-        print("  Precision ( Positive):  ", metrics["precision_binary"])
-        print("  Recall ( Positive):  ", metrics["recall_binary"])
-        print("  F1-Score ( Positive):  ", metrics["f1_binary"])
-        print("Imbalance-Aware Metrics:")
-        print("  Matthews Correlation Coefficient (MCC):  ", metrics["mcc"])
-        print("  Balanced Accuracy:  ", metrics["balanced_accuracy"])
-        print("  Average Precision (AP):  ", metrics["ap"])
-        print("  Area Under ROC Curve (AUROC):  ", metrics["auroc"])
-        print("  Recall@Precision=0.5:  ", metrics["recall_at_precision_50"])
+        logger.info("Confusion Matrix:\n%s", cm_df)
+        logger.info("Macro-averaged Metrics:")
+        logger.info("  Precision (Macro):  %s", metrics["precision_macro"])
+        logger.info("  Recall (Macro):  %s", metrics["recall_macro"])
+        logger.info("  F1-Score (Macro):  %s", metrics["f1_macro"])
+        logger.info("Positive Class Metrics:")
+        logger.info("  Precision ( Positive):  %s", metrics["precision_binary"])
+        logger.info("  Recall ( Positive):  %s", metrics["recall_binary"])
+        logger.info("  F1-Score ( Positive):  %s", metrics["f1_binary"])
+        logger.info("Imbalance-Aware Metrics:")
+        logger.info("  Matthews Correlation Coefficient (MCC):  %s", metrics["mcc"])
+        logger.info("  Balanced Accuracy:  %s", metrics["balanced_accuracy"])
+        logger.info("  Average Precision (AP):  %s", metrics["ap"])
+        logger.info("  Area Under ROC Curve (AUROC):  %s", metrics["auroc"])
+        logger.info("  Recall@Precision=0.5:  %s", metrics["recall_at_precision_50"])
 
         return metrics
 

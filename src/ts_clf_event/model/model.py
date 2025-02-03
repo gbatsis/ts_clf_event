@@ -10,6 +10,9 @@ from sklearn.model_selection import TimeSeriesSplit, GridSearchCV
 from sklearn.metrics import make_scorer, precision_score, recall_score, f1_score
 
 from ts_clf_event.data_handler.data_preprocessing import DataPreprocessor
+from ts_clf_event.utils.logging import setup_logger
+
+logger = setup_logger()
 
 class ModelPipeline:
     """
@@ -92,9 +95,9 @@ class ModelPipeline:
         # Fit the model using a subset of the data for hyperparameter tuning
         grid_search.fit(X, y)
 
-        print("Best parameters set found on development set:")
-        print(grid_search.best_params_)
-     
+        logger.info("Best parameters set found on development set:")
+        logger.info(grid_search.best_params_)
+
         # Return best model, selected hyperparameters and th cv results
         return grid_search.best_estimator_, grid_search.best_params_, grid_search.cv_results_
 
@@ -236,7 +239,10 @@ class ModelPipeline:
             RandomForestClassifier: The instantiated model.
         """
 
-        print("Model parameters:", params)
+        logger.info("Initializing model...")
+
+        logger.info("Model parameters:")
+        logger.info(params)
 
         return RandomForestClassifier(
             **params, random_state=42
