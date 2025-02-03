@@ -7,8 +7,7 @@ copyright: |
   Copyright &copy; 2025-2025 Georgios C. Batsis </a>
 nav:
   - Overview: index.md
-  - Data pipeline: src/data_pipeline.md
-  - Inference pipeline: src/inference.md
+  - CLI: src/CLI.md
   - Code Reference: 
     - Data Handler:
       - Feature Engineer: src/code_reference/_data/feat_eng.md
@@ -17,7 +16,6 @@ nav:
     - Model:
       - Model Pipeline: src/code_reference/model/model_pipeline.md
       - Evaluation: src/code_reference/model/evaluator.md
-      - Utils: src/code_reference/model/utils.md
     - Inference:
       - Inference Pipeline: src/code_reference/inference/inference.md
 theme:
