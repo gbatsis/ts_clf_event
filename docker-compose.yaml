@@ -1,0 +1,20 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      - PACKAGE_NAME=ts_clf_event
+    volumes:
+      - ./data:/home/user/data  # Mount data directory
+      - ./output/models:/home/user/output/models  # Mount models directory
+    restart: always
+    healthcheck:
+          test: curl --fail http://localhost:8000/health || exit 1
+          interval: 2s
+          timeout: 5s
+          retries: 3
+          start_period: 5s

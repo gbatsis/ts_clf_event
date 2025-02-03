@@ -22,7 +22,6 @@ dependencies = [
 
 scripts.manager = "ts_clf_event.cli.manager:app"
 
-readme = "README.md"
 requires-python = ">= 3.8"
 
 [build-system]

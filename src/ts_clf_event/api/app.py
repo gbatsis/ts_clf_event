@@ -9,7 +9,7 @@ from ts_clf_event.utils.logging import setup_logger
 logger = setup_logger()
 
 DATA_PATH = Path(__file__).parent.parent.parent.parent / "data" / "test_dataframe.csv"
-HISTORY_POINTS = 5000
+HISTORY_POINTS = 1000
 WINDOWS = "auto"
 FEATURES_TO_ROLL = ["value", "level", "frequency", "speed"]
 DIFF_LAGS = [1, 2]
@@ -20,6 +20,9 @@ app = FastAPI(
     description="API for making predictions with a trained time series classification model.",
     version="0.1.0"
 )
+
+# Log loading
+logger.info(f"Loading historical data from: {DATA_PATH}")
 
 history_df = extract_history(DATA_PATH, HISTORY_POINTS)
 inference = Inference(history_df, WINDOWS, FEATURES_TO_ROLL, DIFF_LAGS, FEATURES_TO_ROLL, GROUP_BY_COL, HISTORY_POINTS)
@@ -54,6 +57,12 @@ async def predict(data: InferenceInput, request: Request):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+# Healthcheck
+@app.get("/health")
+async def root():
+    return {"message": "Healthy"}
+
 
 # Command to run the API
 #uvicorn ts_clf_event.api.app:app --reload
