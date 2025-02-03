@@ -100,6 +100,8 @@ numpy==2.2.2
     # via scikit-learn
     # via scipy
     # via xgboost
+nvidia-nccl-cu12==2.25.1
+    # via xgboost
 packaging==24.2
     # via mkdocs
     # via plotly
